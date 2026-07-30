@@ -65,12 +65,93 @@ data = st.session_state.data
 st.set_page_config(page_title="QLD 투자 일지", page_icon="📓", layout="wide")
 
 st.markdown("""
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-.block-container { max-width: 1000px; }
-h1 { font-family: Georgia, serif; border-bottom: 2px solid #1F2A24; padding-bottom: 10px; }
-.stat-box { background:#fff; border:1px solid #E2DED2; border-radius:10px; padding:16px 18px; }
-.stat-label { font-size:11px; color:#5B6B60; }
-.stat-value { font-family: Georgia, serif; font-size:22px; color:#1F2A24; }
+:root {
+  --bg: #F6F4EE;
+  --panel: #FFFFFF;
+  --ink: #1F2A24;
+  --ink-soft: #5B6B60;
+  --line: #E5E1D5;
+}
+html, body, [data-testid="stAppViewContainer"] {
+  background-color: var(--bg) !important;
+  font-family: 'Noto Sans KR', -apple-system, sans-serif;
+}
+[data-testid="stHeader"] { background-color: transparent; }
+.block-container { max-width: 1020px; padding-top: 2.2rem; padding-bottom: 3rem; }
+
+h1 {
+  font-family: 'Noto Serif KR', Georgia, serif !important;
+  font-weight: 700 !important;
+  font-size: 30px !important;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 12px;
+  margin-bottom: 4px !important;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+h3 {
+  font-family: 'Noto Serif KR', Georgia, serif !important;
+  font-size: 15px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft) !important;
+  margin-top: 6px !important;
+}
+[data-testid="stCaptionContainer"] { color: var(--ink-soft) !important; }
+hr { border-color: var(--line) !important; margin: 1.6rem 0 !important; }
+
+.stat-box {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: 0 1px 3px rgba(31,42,36,0.04);
+  transition: box-shadow .15s ease;
+}
+.stat-box:hover { box-shadow: 0 3px 10px rgba(31,42,36,0.08); }
+.stat-label { font-size: 11px; color: var(--ink-soft); letter-spacing: 0.03em; margin-bottom: 4px; }
+.stat-value { font-family: 'Noto Serif KR', Georgia, serif; font-size: 21px; color: var(--ink); }
+
+.cal-cell-box {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px;
+  height: 60px;
+  margin-bottom: -6px;
+  box-shadow: 0 1px 2px rgba(31,42,36,0.03);
+}
+
+div[data-testid="stNumberInput"] input,
+div[data-testid="stTextArea"] textarea {
+  border-radius: 8px !important;
+  border-color: var(--line) !important;
+}
+
+.stButton button {
+  border-radius: 8px !important;
+  border: 1px solid var(--line) !important;
+  color: var(--ink-soft) !important;
+  font-size: 12px !important;
+  padding: 2px 0 !important;
+}
+.stButton button:hover {
+  border-color: var(--ink) !important;
+  color: var(--ink) !important;
+}
+.stButton button[kind="primary"] {
+  background: var(--ink) !important;
+  border-color: var(--ink) !important;
+  color: #fff !important;
+}
+
+[data-testid="stExpander"] {
+  border: 1px solid var(--line) !important;
+  border-radius: 10px !important;
+  background: var(--panel) !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -185,7 +266,7 @@ for week in month_days:
             bg = REASONS[entry["reason"]]["bg"] if entry else "#FFFFFF"
             shares_label = f"{entry['shares']}주" if entry and entry.get("shares") else ""
             st.markdown(
-                f"<div style='background:{bg};border:1px solid #E2DED2;border-radius:8px;padding:6px;height:64px;'>"
+                f"<div class='cal-cell-box' style='background:{bg};'>"
                 f"<div style='font-size:11px;color:#5B6B60;'>{day}</div>"
                 f"<div style='font-size:11px;font-weight:600;'>{shares_label}</div></div>",
                 unsafe_allow_html=True,
@@ -264,15 +345,6 @@ st.caption("차트 상단 툴바의 '지표' 버튼으로 20/50/120/200일 이�
 components.html(
     """
     <iframe src="https://www.tradingview.com/widgetembed/?frameElementId=tvchart1&symbol=AMEX%3AQLD&interval=D&hidesidetoolbar=0&hidetoptoolbar=0&symboledit=0&saveimage=0&toolbarbg=F6F4EE&theme=light&style=1&timezone=Asia%2FSeoul&withdateranges=1&locale=kr"
-    style="width:100%;height:460px;border:none;border-radius:8px;"></iframe>
-    """,
-    height=470,
-)
-
-st.subheader("나스닥100 선물 차트 (TradingView)")
-components.html(
-    """
-    <iframe src="https://www.tradingview.com/widgetembed/?frameElementId=tvchart2&symbol=CME_MINI%3ANQ1%21&interval=D&hidesidetoolbar=0&hidetoptoolbar=0&symboledit=0&saveimage=0&toolbarbg=F6F4EE&theme=light&style=1&timezone=Asia%2FSeoul&withdateranges=1&locale=kr"
     style="width:100%;height:460px;border:none;border-radius:8px;"></iframe>
     """,
     height=470,
