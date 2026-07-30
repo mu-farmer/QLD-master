@@ -62,11 +62,13 @@ data = st.session_state.data
 
 # ---------- 페이지 설정 ----------
 
-st.set_page_config(page_title="QLD 투자 일지", page_icon="📓", layout="wide")
+st.set_page_config(page_title="QLD 투자 일지", page_icon="📓", layout="centered")
 
-st.markdown("""
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+st.markdown(
+    """
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;600&display=swap');
+
 :root {
   --bg: #F6F4EE;
   --panel: #FFFFFF;
@@ -75,85 +77,65 @@ st.markdown("""
   --line: #E5E1D5;
 }
 html, body, [data-testid="stAppViewContainer"] {
-  background-color: var(--bg) !important;
+  background-color: var(--bg);
   font-family: 'Noto Sans KR', -apple-system, sans-serif;
 }
 [data-testid="stHeader"] { background-color: transparent; }
-.block-container { max-width: 1020px; padding-top: 2.2rem; padding-bottom: 3rem; }
+.block-container { max-width: 900px; padding-top: 2rem; padding-bottom: 3rem; }
 
 h1 {
-  font-family: 'Noto Serif KR', Georgia, serif !important;
-  font-weight: 700 !important;
-  font-size: 30px !important;
+  font-family: 'Noto Serif KR', Georgia, serif;
+  font-weight: 700;
+  font-size: 28px;
   border-bottom: 2px solid var(--ink);
-  padding-bottom: 12px;
-  margin-bottom: 4px !important;
-  letter-spacing: -0.01em;
+  padding-bottom: 10px;
+  margin-bottom: 4px;
   color: var(--ink);
 }
 h3 {
-  font-family: 'Noto Serif KR', Georgia, serif !important;
-  font-size: 15px !important;
+  font-family: 'Noto Serif KR', Georgia, serif;
+  font-size: 14px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ink-soft) !important;
-  margin-top: 6px !important;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
 }
-[data-testid="stCaptionContainer"] { color: var(--ink-soft) !important; }
-hr { border-color: var(--line) !important; margin: 1.6rem 0 !important; }
+hr { border-color: var(--line); margin: 1.4rem 0; }
 
 .stat-box {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 12px;
-  padding: 16px 18px;
-  box-shadow: 0 1px 3px rgba(31,42,36,0.04);
-  transition: box-shadow .15s ease;
+  padding: 14px 16px;
+  box-shadow: 0 1px 3px rgba(31,42,36,0.05);
 }
-.stat-box:hover { box-shadow: 0 3px 10px rgba(31,42,36,0.08); }
-.stat-label { font-size: 11px; color: var(--ink-soft); letter-spacing: 0.03em; margin-bottom: 4px; }
-.stat-value { font-family: 'Noto Serif KR', Georgia, serif; font-size: 21px; color: var(--ink); }
+.stat-label { font-size: 11px; color: var(--ink-soft); margin-bottom: 4px; }
+.stat-value { font-family: 'Noto Serif KR', Georgia, serif; font-size: 19px; color: var(--ink); }
 
 .cal-cell-box {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 10px;
-  padding: 8px;
-  height: 60px;
+  padding: 6px;
+  height: 56px;
   margin-bottom: -6px;
-  box-shadow: 0 1px 2px rgba(31,42,36,0.03);
-}
-
-div[data-testid="stNumberInput"] input,
-div[data-testid="stTextArea"] textarea {
-  border-radius: 8px !important;
-  border-color: var(--line) !important;
 }
 
 .stButton button {
-  border-radius: 8px !important;
-  border: 1px solid var(--line) !important;
-  color: var(--ink-soft) !important;
-  font-size: 12px !important;
-  padding: 2px 0 !important;
-}
-.stButton button:hover {
-  border-color: var(--ink) !important;
-  color: var(--ink) !important;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 12px;
+  padding: 2px 0;
 }
 .stButton button[kind="primary"] {
-  background: var(--ink) !important;
-  border-color: var(--ink) !important;
-  color: #fff !important;
-}
-
-[data-testid="stExpander"] {
-  border: 1px solid var(--line) !important;
-  border-radius: 10px !important;
-  background: var(--panel) !important;
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
 }
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 st.title("QLD 투자 일지")
 st.caption("DISCIPLINE OVER IMPULSE · 데이터는 data.json 파일에 영구 저장됩니다")
@@ -162,11 +144,13 @@ st.caption("DISCIPLINE OVER IMPULSE · 데이터는 data.json 파일에 영구 �
 
 st.subheader("보유 현황 (캘린더 자동 연동)")
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col2 = st.columns(2)
 with col1:
     base_shares = st.number_input("일지 시작 전 기존 보유 수량", value=float(data.get("base_shares", 0.0)), step=0.0001, format="%.4f")
 with col2:
     base_avg = st.number_input("기존 보유 평단가 (USD)", value=float(data.get("base_avg_price", 0.0)), step=0.01, format="%.2f")
+
+col3, col4 = st.columns(2)
 with col3:
     current_price = st.number_input("QLD 현재가 (USD, 수동 입력)", value=float(data.get("current_price", 0.0)), step=0.01, format="%.2f")
 with col4:
@@ -190,10 +174,13 @@ total_shares = base_shares + entry_shares_sum
 total_cost = base_shares * base_avg + entry_cost_sum
 avg_price = (total_cost / total_shares) if total_shares > 0 else 0
 
-c1, c2, c3, c4, c5 = st.columns(5)
+c1, c2, c3 = st.columns(3)
 c1.markdown(f'<div class="stat-box"><div class="stat-label">총 보유 수량</div><div class="stat-value">{total_shares:.4f}주</div></div>', unsafe_allow_html=True)
 c2.markdown(f'<div class="stat-box"><div class="stat-label">평단가</div><div class="stat-value">${avg_price:,.2f}</div></div>', unsafe_allow_html=True)
 c3.markdown(f'<div class="stat-box"><div class="stat-label">총 매입원가</div><div class="stat-value">${total_cost:,.2f}</div></div>', unsafe_allow_html=True)
+
+st.write("")
+c4, c5 = st.columns(2)
 
 if current_price > 0 and total_shares > 0:
     value_usd = total_shares * current_price
